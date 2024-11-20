@@ -4,7 +4,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from typing import Optional
 from chat_manager import ChatManager
 from file_processor import process_file
-from gpt4_vision_handler import analyze_with_gpt4_vision
+from gpt_4o_img import analyze_with_gpt4_vision
 
 app = FastAPI()
 chat_manager = ChatManager()

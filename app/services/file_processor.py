@@ -4,7 +4,7 @@ import base64
 from typing import List, Optional
 from fastapi import UploadFile
 import imghdr
-from pdf_img_converter import convert_pdf_to_images
+from app.services.file_processor import convert_pdf_to_images
 
 async def process_file(file: Optional[UploadFile] = None) -> List[str]:
     """
