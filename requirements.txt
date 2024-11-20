@@ -19,3 +19,4 @@ langchain-openai
 pytest 
 pytest-asyncio 
 httpx
+pymupdf
