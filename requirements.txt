@@ -1,0 +1,21 @@
+fastapi
+uvicorn
+pydantic
+langchain
+openai
+langchain-chroma
+langchain-experimental
+unstructured[all-docs] 
+pillow
+pydantic
+lxml
+pillow
+matplotlib
+chromadb
+tiktoken
+streamlit
+langchain-openai
+#for testing 
+pytest 
+pytest-asyncio 
+httpx
