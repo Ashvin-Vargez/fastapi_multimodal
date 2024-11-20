@@ -1,4 +1,4 @@
-# gpt4_vision_handler.py
+# gpt4_o.py
 
 from typing import List
 from dotenv import load_dotenv
@@ -13,13 +13,15 @@ API_KEY = os.getenv("OPENAI_API_KEY")
 if not API_KEY:
     raise ValueError("OPENAI_API_KEY environment variable is not set")
 
+MAX_IMAGES_PER_REQUEST = 20  # Maximum number of images per request
+
 async def analyze_with_gpt4o(
     base64_images: List[str],
     prompt: str,
     chat_history: List[dict]
 ) -> dict:
     """
-    Analyze images using GPT-4o model with chat history
+    Analyze multiple images using GPT-4o model with chat history
     
     Args:
         base64_images (List[str]): List of base64 encoded images
@@ -29,13 +31,18 @@ async def analyze_with_gpt4o(
     Returns:
         dict: Analysis results
     """
+    # Check if we exceed the maximum number of images
+    if len(base64_images) > MAX_IMAGES_PER_REQUEST:
+        raise ValueError(f"Maximum number of images per request is {MAX_IMAGES_PER_REQUEST}")
+    
     # Construct the API messages
     api_messages = [
         {
             "role": "system",
             "content": """You are an AI assistant analyzing images and engaging in conversation about them. 
-                        If images are uploaded, answer questions based only on the images and text present in them. If not provide general answers for the queries.
-                        Give relevant and concise information."""
+                        Answer questions based only on the images and text present in them. 
+                        If multiple images are provided, consider all of them in your analysis.
+                        If, no images are given, just answer the quetion. Give relevant and concise information."""
         }
     ]
     
@@ -52,7 +59,7 @@ async def analyze_with_gpt4o(
     current_content = [{"type": "text", "text": prompt}]
     
     # Add images if present
-    for base64_image in base64_images:
+    for idx, base64_image in enumerate(base64_images):
         current_content.append({
             "type": "image_url",
             "image_url": {

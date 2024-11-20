@@ -1,10 +1,10 @@
 # main.py
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from typing import Optional
+from typing import List, Optional
 from chat_manager import ChatManager
-from file_processor import process_file
-from gpt_4o_img import analyze_with_gpt4o
+from file_processor import process_files
+from gpt4_vision_handler import analyze_with_gpt4_vision
 
 app = FastAPI()
 chat_manager = ChatManager()
@@ -14,23 +14,23 @@ async def chat_endpoint(
     user_id: str = Form(...),
     session_id: str = Form(...),
     prompt: str = Form(...),
-    file: Optional[UploadFile] = File(None)
+    files: List[UploadFile] = File(None)
 ):
     """
-    Chat endpoint that handles both text and file inputs
+    Chat endpoint that handles multiple file inputs
     
     Args:
         user_id (str): User identifier
         session_id (str): Session identifier
         prompt (str): User's message/prompt
-        file (UploadFile, optional): Image or PDF file
+        files (List[UploadFile], optional): List of image and/or PDF files
         
     Returns:
         dict: Chat response with analysis
     """
     try:
-        # Process file if provided
-        base64_images = await process_file(file)
+        # Process multiple files if provided
+        base64_images = await process_files(files)
         
         # Get chat history
         chat_history = chat_manager.get_chat_history(user_id, session_id)
@@ -39,7 +39,7 @@ async def chat_endpoint(
         chat_manager.add_message(user_id, session_id, "user", prompt)
         
         # Get response from GPT-4 Vision
-        response = await analyze_with_gpt4o(
+        response = await analyze_with_gpt4_vision(
             base64_images=base64_images,
             prompt=prompt,
             chat_history=chat_history
@@ -56,7 +56,8 @@ async def chat_endpoint(
         return {
             "status": "success",
             "message": response["analysis"],
-            "chat_history": chat_manager.get_chat_history(user_id, session_id)
+            "chat_history": chat_manager.get_chat_history(user_id, session_id),
+            "number_of_processed_images": len(base64_images)
         }
         
     except ValueError as e:
