@@ -4,7 +4,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from typing import Optional
 from chat_manager import ChatManager
 from file_processor import process_file
-from gpt_4o_img import analyze_with_gpt4_vision
+from gpt_4o_img import analyze_with_gpt4o
 
 app = FastAPI()
 chat_manager = ChatManager()
@@ -39,7 +39,7 @@ async def chat_endpoint(
         chat_manager.add_message(user_id, session_id, "user", prompt)
         
         # Get response from GPT-4 Vision
-        response = await analyze_with_gpt4_vision(
+        response = await analyze_with_gpt4o(
             base64_images=base64_images,
             prompt=prompt,
             chat_history=chat_history
