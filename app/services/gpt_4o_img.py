@@ -13,7 +13,7 @@ API_KEY = os.getenv("OPENAI_API_KEY")
 if not API_KEY:
     raise ValueError("OPENAI_API_KEY environment variable is not set")
 
-MAX_IMAGES_PER_REQUEST = 20  # Maximum number of images per request
+MAX_IMAGES_PER_REQUEST = 100  # Maximum number of images per request
 
 async def analyze_with_gpt4o(
     base64_images: List[str],
