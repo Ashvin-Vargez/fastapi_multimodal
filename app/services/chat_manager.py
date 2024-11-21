@@ -1,7 +1,7 @@
 # chat_manager.py
 
 from typing import Dict, List, Optional
-from datetime import datetime
+from datetime import datetime,timezone
 
 class ChatManager:
     def __init__(self):
@@ -15,13 +15,15 @@ class ChatManager:
             
         if session_id not in self.chat_history[user_id]:
             self.chat_history[user_id][session_id] = []
-            
+
         message = {
             "role": role,
             "content": content,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
         self.chat_history[user_id][session_id].append(message)
+
+        
     
     def get_chat_history(self, user_id: str, session_id: str) -> List[dict]:
         """Get chat history for a specific user and session."""
