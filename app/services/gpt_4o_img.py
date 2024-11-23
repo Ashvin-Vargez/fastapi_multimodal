@@ -18,7 +18,8 @@ MAX_IMAGES_PER_REQUEST = 60  # Maximum number of images per request
 async def analyze_with_gpt4o(
     base64_images: List[str],
     prompt: str,
-    chat_history: List[dict]
+    chat_history: List[dict],
+    system_prompt: str = None
 ) -> dict:
     """
     Analyze multiple images using GPT-4o model with chat history
@@ -27,6 +28,7 @@ async def analyze_with_gpt4o(
         base64_images (List[str]): List of base64 encoded images
         prompt (str): User's prompt/question
         chat_history (List[dict]): Previous chat messages
+        system_prompt (str, optional): Additional system prompt
         
     Returns:
         dict: Analysis results
@@ -42,9 +44,16 @@ async def analyze_with_gpt4o(
             "content": """You are an AI assistant analyzing images and engaging in conversation about them. 
                         Answer questions based only on the images and text present in them. 
                         If multiple images are provided, consider all of them in your analysis.
-                        If, no images are given, just answer the quetion. Give relevant and concise information."""
+                        If, no images are given, just answer the question. Give relevant and concise information."""
         }
     ]
+    
+    # Add additional system prompt if provided
+    if system_prompt:
+        api_messages.append({
+            "role": "system",
+            "content": system_prompt
+        })
     
     # Add chat history
     for msg in chat_history:

@@ -14,6 +14,7 @@ async def chat_endpoint(
     user_id: str = Form(...),
     session_id: str = Form(...),
     prompt: str = Form(...),
+    system_prompt: str = Form(None),
     files: List[UploadFile] = File(None)
 ):
     """
@@ -23,6 +24,7 @@ async def chat_endpoint(
         user_id (str): User identifier
         session_id (str): Session identifier
         prompt (str): User's message/prompt
+        system_prompt (str, optional): Additional system prompt
         files (List[UploadFile], optional): List of image and/or PDF files
         
     Returns:
@@ -42,15 +44,8 @@ async def chat_endpoint(
         response = await analyze_with_gpt4o(
             base64_images=base64_images,
             prompt=prompt,
-            chat_history=chat_history
-        )
-        
-        # Add assistant's response to history
-        chat_manager.add_message(
-            user_id,
-            session_id,
-            "assistant",
-            response["analysis"]
+            chat_history=chat_history,
+            system_prompt=system_prompt
         )
         
         return {

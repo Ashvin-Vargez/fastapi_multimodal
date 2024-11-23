@@ -1,22 +1,23 @@
 fastapi
 uvicorn
 pydantic
-langchain
+# langchain
 openai
-langchain-chroma
-langchain-experimental
-unstructured[all-docs] 
+# langchain-chroma
+# langchain-experimental
+# unstructured[all-docs] 
 pillow
-pydantic
-lxml
-pillow
-matplotlib
-chromadb
-tiktoken
-streamlit
-langchain-openai
+# lxml
+# matplotlib
+# chromadb
+# tiktoken
+# streamlit
+# langchain-openai
 #for testing 
-pytest 
-pytest-asyncio 
-httpx
+# pytest 
+# pytest-asyncio 
+# httpx
 pymupdf
+python-dotenv
+requests
+python-multipart
